@@ -7,11 +7,19 @@ var sightingSchema = new mongoose.Schema({
     status: {
         type: String,
         lowercase: true,
-        
-    }
-    
-    
-    
-    
-    
-})
+        enum: [
+            'extinct',
+            'extinct in wild',
+            'critically endangered',
+            'endangered',
+            'vulnerable',
+            'near threatend',
+            'conservation dependent',
+            'least concern'
+        ]
+    },
+    confirmed: {type: Boolean, default: false},
+    numberSeen: {type: Number, min: 1}
+});
+
+module.exports = mongoose.model('Sighting', sightingSchema);
