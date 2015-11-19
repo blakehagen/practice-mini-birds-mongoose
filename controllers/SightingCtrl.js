@@ -2,16 +2,19 @@ var Sighting = require('../models/sighting');
 
 module.exports = {
     
-    // read
-    getSightings: function (req, res, next) {
-        Sighting.find(req.query)
-            .exec(function (err, result) {
-                if (err) return res.status(500).send(err);
-                else res.send(result);
-            })
+    // get/read
+    get: function (req, res, next) {
+        Sighting.find().populate('user').exec().then(function (sightings, err) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(sightings);
+            }
+        })
     },
+   
     // create
-    postNewSighting: function (req, res, next) {
+    create: function (req, res, next) {
         var newSighting = new Sighting(req.body);
         newSighting.save(function (err, result) {
             if (err) return res.status(500).send(err);
@@ -19,14 +22,14 @@ module.exports = {
         });
     },
     // update
-    editSighting: function (req, res, next) {
+    update: function (req, res, next) {
         Sighting.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
             if (err) return res.status(500).send(err);
             else res.send(result);
         });
     },
     // delete
-    deleteSighting: function (req, res, next) {
+    delete: function (req, res, next) {
         Sighting.findByIdAndRemove(req.params.id, function (err, result) {
             if (err) return res.status(500).send(err);
             else res.send(result);
